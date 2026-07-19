@@ -90,9 +90,61 @@ const verifier = new TokenVerifier({
 | `resolveAuthMethods` / `devLoginAllowed` | 登录方式可用性；生产环境据此**在服务端**停用预设账户 |
 | `ExchangeStore` | SSO 回调的一次性交换码，避免把令牌拼进 URL |
 | `JwtAuthGuard` / `CurrentUser` / `TenantId` | NestJS 守卫与装饰器 |
-| `PermissionGuard` / `RequirePermission` / `permissionsOf` | 基于能力的判权，未知角色默认拒绝 |
+| `PermissionGuard` / `RequirePermission` / `createPermissionRegistry` | 基于能力的判权，未知角色默认拒绝 |
 
 `TenantId` 从令牌取租户，请求头 `X-Tenant-Id` 只能在令牌允许的租户里选一个，越权返回 403。
+
+## 判权：角色 → 能力
+
+**权限目录是各模块自己的业务知识，不长在共享包里**——门户不关心 `assets:write`，
+模块二不关心 `leave-plans:approve`。共享包只提供通用算法：给一张角色表，算某组角色
+有没有某个能力。
+
+```ts
+// 模块自己的 permissions.ts
+import { createPermissionRegistry } from '@smart-wing/auth';
+
+export const PERMISSIONS = {
+  ASSETS_READ: 'assets:read',
+  ASSETS_WRITE: 'assets:write',
+} as const;
+
+export const { hasPermission, permissionsOf } = createPermissionRegistry<
+  (typeof PERMISSIONS)[keyof typeof PERMISSIONS]
+>({
+  admin: [PERMISSIONS.ASSETS_READ, PERMISSIONS.ASSETS_WRITE],
+  viewer: [PERMISSIONS.ASSETS_READ],
+});
+```
+
+```ts
+// 模块自己的 auth.module.ts：把 hasPermission 注入给 PermissionGuard
+import { PERMISSION_CHECKER, PermissionGuard, JwtAuthGuard } from '@smart-wing/auth';
+import { hasPermission } from './permissions';
+
+@Module({
+  providers: [
+    { provide: PERMISSION_CHECKER, useValue: hasPermission },
+    JwtAuthGuard,
+    PermissionGuard,
+  ],
+})
+export class AuthModule {}
+```
+
+```ts
+// 控制器上用
+@UseGuards(JwtAuthGuard, PermissionGuard)
+@Controller('assets')
+export class AssetsController {
+  @Patch(':id')
+  @RequirePermission(PERMISSIONS.ASSETS_WRITE)
+  update() { /* ... */ }
+}
+```
+
+"能力转前端友好布尔值"（`capabilitiesOf`）同理由各模块自己写一个小函数，不放共享包——
+不同模块的能力名称完全不同，硬塞一个通用形状没有意义。
 
 ## 开发
 

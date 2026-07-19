@@ -37,16 +37,14 @@ export { loadKeyPair, normalizePem, toPublicJwks, type KeyPairConfig, type Loade
 export { TokenIssuer, DEFAULT_TTL_SECONDS, type IssuerConfig, type TokenClaims } from './tokens/issuer';
 export { TokenVerifier, type VerifierConfig } from './tokens/verifier';
 
-export {
-  capabilitiesOf,
-  hasPermission,
-  permissionsOf,
-  PERMISSIONS,
-  type Permission,
-} from './permissions';
+export { createPermissionRegistry } from './permission-registry';
 
 export { JwtAuthGuard, TOKEN_VERIFIER, extractBearerToken } from './nest/jwt-auth.guard';
 export { CurrentUser, extractCurrentUser } from './nest/current-user.decorator';
 export { TenantId, extractTenantId } from './nest/tenant-id.decorator';
-export { PermissionGuard } from './nest/permission.guard';
+export {
+  PermissionGuard,
+  PERMISSION_CHECKER,
+  type PermissionChecker,
+} from './nest/permission.guard';
 export { RequirePermission, REQUIRED_PERMISSION } from './nest/require-permission.decorator';
