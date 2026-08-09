@@ -2,6 +2,14 @@
 
 Smart Wing 平台的共享认证包。门户（签发方）与各业务模块（验签方）共用同一份实现。
 
+> **双包结构**：本仓库从 v0.3.0 起包含两个 npm 包——
+> - 根包 `@smart-wing/auth`：后端共享认证（令牌签发/验签/JWKS/Nest 守卫）
+> - 子包 `@smart-wing/frontend-auth`（`frontend/` 目录）：前端门户 SSO 握手与会话管理
+>
+> 两者各自独立 `build`/`test`/版本。前端包通过
+> `github:GEHC-WX/smart-wing-auth#v0.3.0&path=frontend` 引用，见
+> `frontend/README.md`。
+
 ## 为什么要有这个包
 
 同一套认证逻辑此前在门户与模块二各写了一遍。复制的时候**源码复制了、测试忘了**，
