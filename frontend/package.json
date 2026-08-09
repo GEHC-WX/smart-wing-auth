@@ -2,7 +2,7 @@
   "name": "@smart-wing/frontend-auth",
   "version": "0.1.0",
   "description": "Smart Wing 平台前端共享认证包：门户 SSO 握手与会话管理（各业务模块 auth.ts 的公共收敛）",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
