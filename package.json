@@ -2,7 +2,7 @@
   "name": "@smart-wing/auth",
   "version": "0.2.0",
   "description": "Smart Wing 平台共享认证包",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
