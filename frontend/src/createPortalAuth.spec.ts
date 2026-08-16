@@ -42,7 +42,7 @@ describe('createPortalAuth', () => {
     // redirectToPortal 用 window.location.href；测试里不真正导航，
     // 通过 spy 在调用前替换。其余函数不触碰 window。
     (globalThis as { window?: unknown }).window = {
-      location: { hostname: 'test-host', origin: 'http://test-host:5100', pathname: '/apps/test' },
+      location: { hostname: 'test-host', origin: 'https://test-host', pathname: '/apps/test' },
     };
   });
 
@@ -86,7 +86,7 @@ describe('createPortalAuth', () => {
 
   it('redirectToPortal 带 returnToModule 参数跳门户', () => {
     const auth = makeAuth('it-ot');
-    const location = { hostname: 'test-host', origin: 'http://test-host:5100', pathname: '/apps/it-ot' };
+    const location = { hostname: 'test-host', origin: 'https://test-host', pathname: '/apps/it-ot' };
     const locationMock: { href: string } = { href: '' };
     Object.defineProperty(locationMock, 'origin', { value: location.origin });
     Object.defineProperty(locationMock, 'pathname', { value: location.pathname });
@@ -94,8 +94,8 @@ describe('createPortalAuth', () => {
     (globalThis as { window?: unknown }).window = { location: locationMock };
 
     auth.redirectToPortal();
-    expect(locationMock.href).toContain('http://test-host:5100/?returnToModule=');
-    expect(locationMock.href).toContain(encodeURIComponent('http://test-host:5100/apps/it-ot'));
+    expect(locationMock.href).toContain('https://test-host/?returnToModule=');
+    expect(locationMock.href).toContain(encodeURIComponent('https://test-host/apps/it-ot'));
   });
 
   it('setSelectedTenant 传空字符串时移除 storage key', () => {
@@ -145,7 +145,7 @@ describe('createPortalAuth', () => {
 
   it('未配置 env 时 PORTAL_WEB 回退到当前主机名 + 默认端口', () => {
     const auth = makeAuth('it-ot');
-    expect(auth.PORTAL_WEB).toBe('http://test-host:5100');
+    expect(auth.PORTAL_WEB).toBe('https://test-host');
   });
 
   it('exchangePortalCode 成功后写入会话并返回用户', async () => {

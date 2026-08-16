@@ -54,7 +54,7 @@ export function createPortalAuth<C = Record<string, boolean>>(
   const TENANT_KEY = `${moduleId}:tenant`;
 
   const HOST = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  const PORTAL_WEB = env.VITE_PORTAL_WEB_URL ?? `http://${HOST}:5100`;
+  const PORTAL_WEB = env.VITE_PORTAL_WEB_URL ?? `https://${HOST}`;
   const PORTAL_API = env.VITE_PORTAL_API_URL ?? `http://${HOST}:4000/api/v1`;
   const PREVIEW_MODE = env.VITE_PREVIEW_MODE === 'true';
 

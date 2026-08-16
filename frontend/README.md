@@ -58,7 +58,7 @@ export const {
 
 行为约定（与各模块原 `auth.ts` 逐项对齐）：
 - 门户地址 `VITE_PORTAL_WEB_URL` / `VITE_PORTAL_API_URL` 环境变量优先，
-  本地/内网回退到当前主机名（`http://<host>:5100` / `:4000/api/v1`）。
+  本地/内网回退到当前主机名（`https://<host>` / `:4000/api/v1`）。
 - 前端**不自行按 roles 推导能力**——能力取自后端 `GET /me` 算好的
   `capabilities`，判权规则只存一份（后端）。
 - `exchangePortalCode` 拿门户一次性码换令牌；失败抛「门户握手失败」。
